@@ -31,7 +31,7 @@ function App() {
 
 
   function initialize() {
-     scene = new THREE.Scene();
+    scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(
       fov,
       window.innerWidth / window.innerHeight,
@@ -53,7 +53,7 @@ function App() {
     document.body.appendChild(renderer.domElement);
 
     clock = new THREE.Clock();
-    controls= new OrbitControls(camera, renderer.domElement);
+    controls = new OrbitControls(camera, renderer.domElement);
 
     stats = Stats();
     document.body.appendChild(stats.dom);
@@ -79,8 +79,8 @@ function App() {
     }
 
     initialize();
-   
-   
+
+
 
     // main group
     // const mainGroup = new THREE.Group();
@@ -179,7 +179,7 @@ function App() {
     sl.position.set(0, 2, 2);
     const slHelper = new THREE.SpotLightHelper(sl);
     scene.add(sl, slHelper);
-    
+
 
     // Create an invisible mesh at the spotlight's position
     let spotlightClickTarget = new THREE.Mesh(
@@ -213,8 +213,8 @@ function App() {
     pl.position.set(2, 2, 2);
     const plHelper = new THREE.PointLightHelper(pl, 0.5);
     scene.add(pl, plHelper);
-   
-   
+
+
 
     const orbitSettings = {
       enabled: true,
@@ -224,7 +224,7 @@ function App() {
       controls.enabled = value;
     })
 
-controlHandle.open()
+    controlHandle.open()
     // set up point light gui
     const plSettings = {
       visible: true,
@@ -244,7 +244,7 @@ controlHandle.open()
       .addColor(plSettings, 'color')
       .onChange((value) => pl.color.set(value));
     plFolder.open();
-   
+
     const raycaster = new THREE.Raycaster();
     const clickMouse = new THREE.Vector2();
     const moveMouse = new THREE.Vector2();
@@ -300,18 +300,21 @@ controlHandle.open()
     }
 
 
-    const controlsDrag = new DragControls([boxMesh1,boxMesh2,boxMesh3], camera, renderer.domElement);
+    const controlsDrag = new DragControls([boxMesh1, boxMesh2, boxMesh3,spotlightClickTarget], camera, renderer.domElement);
 
     // add event listener to highlight dragged objects
 
     controlsDrag.addEventListener('dragstart', function (event) {
-
+     
       event.object.material.emissive.set(0xaaaaaa);
 
     });
 
     controlsDrag.addEventListener('dragend', function (event) {
-
+      if (event.object.userData.name == "SPOTLIGHT") {
+        sl.position.copy(event.object.position);
+        slHelper.update();
+      }
       event.object.material.emissive.set(0x000000);
 
     });
