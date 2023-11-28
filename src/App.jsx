@@ -318,6 +318,14 @@ function App() {
       event.object.material.emissive.set(0x000000);
 
     });
+    controlsDrag.addEventListener('drag', function (event) {
+      if (event.object.userData.name == "SPOTLIGHT") {
+        sl.position.copy(event.object.position);
+        slHelper.update();
+      }
+      event.object.material.emissive.set(0x000000);
+
+    });
 
     animate()
     // Destroy the GUI on reload to prevent multiple stale UI from being displayed on screen.
